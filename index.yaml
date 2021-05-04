@@ -1,11 +1,56 @@
 id: github.com/cloud-native-toolkit/terraform-ibm-kms-key
-name: ""
+name: ibm-kms-key
+alias: kms-key
 type: terraform
-description: ""
+description: Module to lookup or create a KMS key
 tags:
-  - tools
-  - devops
+  - kms
+  - key
 versions:
+  - platforms: []
+    dependencies:
+      - id: kms
+        refs:
+          - source: github.com/ibm-garage-cloud/terraform-ibm-key-protect
+            version: ">= 1.0.0"
+          - source: github.com/ibm-garage-cloud/terraform-ibm-hpcsr
+            version: ">= 1.0.0"
+    variables:
+      - name: key_id
+        moduleRef:
+          id: kms
+          output: guid
+      - name: region
+        type: string
+        description: The IBM Cloud region where the cluster will be/has been installed.
+      - name: ibmcloud_api_key
+        type: string
+        description: The IBM Cloud api token
+      - name: provision
+        type: bool
+        description: Flag indicating that the key should be provisioned. If false then an existing key will be looked up
+        default: false
+        optional: true
+      - name: kms_id
+        type: string
+        description: The id of the kms instance. Required if kms_enabled is true
+        default: ""
+        optional: true
+      - name: name
+        type: string
+        description: The name of the root key in the kms instance. Required if kms_enabled is true
+        default: ""
+        optional: true
+    version: v1.0.0
+    outputs:
+      - name: id
+        description: The id of the key
+      - name: name
+        description: The crn of the key
+      - name: crn
+        description: The crn of the key
+      - name: kms_id
+        description: The id of the kms instance
   - platforms:
       - kubernetes
       - ocp3
@@ -27,28 +72,3 @@ versions:
     #          version: ">= 1.6.0"
     variables: []
     version: v0.0.0
-#    - name: cluster_type
-#      moduleRef:
-#        id: cluster
-#        output: type_code
-#    - name: cluster_ingress_hostname
-#      moduleRef:
-#        id: cluster
-#        output: ingress_hostname
-#    - name: cluster_config_file
-#      moduleRef:
-#        id: cluster
-#        output: config_file_path
-#    - name: tls_secret_name
-#      moduleRef:
-#        id: cluster
-#        output: tls_secret_name
-#    - name: releases_namespace
-#      moduleRef:
-#        id: namespace
-#        output: name
-#        discriminator: tools
-#    - name: icon_url
-#      moduleRef:
-#        id: dashboard
-#        output: base_icon_url

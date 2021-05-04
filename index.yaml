@@ -21,6 +21,53 @@ versions:
           id: kms
           output: guid
       - name: region
+        moduleRef:
+          id: kms
+          output: location
+        type: string
+        description: The IBM Cloud region where the cluster will be/has been installed.
+      - name: ibmcloud_api_key
+        type: string
+        description: The IBM Cloud api token
+      - name: provision
+        type: bool
+        description: Flag indicating that the key should be provisioned. If false then an existing key will be looked up
+        default: false
+        optional: true
+      - name: kms_id
+        type: string
+        description: The id of the kms instance. Required if kms_enabled is true
+        default: ""
+        optional: true
+      - name: name
+        type: string
+        description: The name of the root key in the kms instance. Required if kms_enabled is true
+        default: ""
+        optional: true
+    version: v1.0.1
+    outputs:
+      - name: id
+        description: The id of the key
+      - name: name
+        description: The crn of the key
+      - name: crn
+        description: The crn of the key
+      - name: kms_id
+        description: The id of the kms instance
+  - platforms: []
+    dependencies:
+      - id: kms
+        refs:
+          - source: github.com/ibm-garage-cloud/terraform-ibm-key-protect
+            version: ">= 1.0.0"
+          - source: github.com/ibm-garage-cloud/terraform-ibm-hpcsr
+            version: ">= 1.0.0"
+    variables:
+      - name: key_id
+        moduleRef:
+          id: kms
+          output: guid
+      - name: region
         type: string
         description: The IBM Cloud region where the cluster will be/has been installed.
       - name: ibmcloud_api_key

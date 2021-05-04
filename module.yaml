@@ -19,3 +19,8 @@ versions:
       moduleRef:
         id: kms
         output: guid
+    - name: region
+      moduleRef:
+        id: kms
+        output: location
+

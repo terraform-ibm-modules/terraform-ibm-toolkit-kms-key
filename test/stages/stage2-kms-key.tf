@@ -1,7 +1,7 @@
 module "kms_key" {
   source = "./module"
 
-  region           = var.region
+  region           = var.hpcs_region
   ibmcloud_api_key = var.ibmcloud_api_key
   name             = var.kms_key_name
   provision        = var.kms_key_provision

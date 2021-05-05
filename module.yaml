@@ -12,7 +12,7 @@ versions:
       refs:
         - source: github.com/ibm-garage-cloud/terraform-ibm-key-protect
           version: ">= 1.0.0"
-        - source: github.com/ibm-garage-cloud/terraform-ibm-hpcsr
+        - source: github.com/ibm-garage-cloud/terraform-ibm-hpcs
           version: ">= 1.0.0"
   variables:
     - name: key_id

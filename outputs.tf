@@ -5,7 +5,8 @@ output "id" {
 
 output "name" {
   description = "The crn of the key"
-  value       = local.root_key.name
+  value       = var.provision ? var.name : data.ibm_kms_key.root_key[0].keys[0].id
+  depends_on  = [ibm_kms_key.root_key, data.ibm_kms_key.root_key]
 }
 
 output "crn" {

@@ -26,3 +26,15 @@ variable "name" {
   description = "The name of the root key in the kms instance. Required if kms_enabled is true"
   default     = ""
 }
+
+variable "name_prefix" {
+  type        = string
+  description = "The name_prefix used to build the name if one is not provided. If used the name will be `{name_prefix}-{label}`"
+  default     = "base"
+}
+
+variable "label" {
+  type        = string
+  description = "The label used to build the name if one is not provided. If used the name will be `{name_prefix}-{label}`"
+  default     = "key"
+}

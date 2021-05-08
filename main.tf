@@ -1,5 +1,6 @@
 
 locals {
+  name     = var.name != "" ? var.name : "${var.name_prefix}-${var.label}"
   root_key = var.provision ? ibm_kms_key.root_key[0] : data.ibm_kms_key.root_key[0].keys[0]
 }
 

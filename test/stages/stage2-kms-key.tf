@@ -3,7 +3,8 @@ module "kms_key" {
 
   region           = var.hpcs_region
   ibmcloud_api_key = var.ibmcloud_api_key
-  name             = var.kms_key_name
+  name_prefix      = var.name_prefix
+  label            = "test-key"
   provision        = var.kms_key_provision
   kms_id           = module.hpcs.guid
 }

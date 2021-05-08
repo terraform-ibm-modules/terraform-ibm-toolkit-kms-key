@@ -25,3 +25,5 @@ versions:
         output: location
     - name: ibmcloud_api_key
       scope: global
+    - name: name_prefix
+      scope: global

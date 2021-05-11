@@ -38,3 +38,19 @@ variable "label" {
   description = "The label used to build the name if one is not provided. If used the name will be `{name_prefix}-{label}`"
   default     = "key"
 }
+
+variable "rotation_interval" {
+  type        = number
+  description = "The interval in months that a root key needs to be rotated."
+  default     = 3
+  validation {
+    condition     = var.rotation_interval >= 1 && var.rotation_interval <= 12
+    error_message = "The rotation interval must be 1 to 12 months."
+  }
+}
+
+variable "dual_auth_delete" {
+  type        = bool
+  description = "Flag indicating that the key requires dual authorization to be deleted."
+  default     = false
+}

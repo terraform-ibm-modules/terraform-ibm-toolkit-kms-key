@@ -15,6 +15,76 @@ versions:
             version: ">= 1.0.0"
           - source: github.com/ibm-garage-cloud/terraform-ibm-hpcs
             version: ">= 1.0.0"
+          - source: github.com/ibm-garage-cloud/terraform-ibm-kms
+            version: ">= 0.0.0"
+    variables:
+      - name: kms_id
+        moduleRef:
+          id: kms
+          output: guid
+        type: string
+        description: The id of the kms instance. Required if kms_enabled is true
+        default: ""
+        optional: true
+      - name: region
+        moduleRef:
+          id: kms
+          output: location
+        type: string
+        description: The IBM Cloud region where the cluster will be/has been installed.
+      - name: ibmcloud_api_key
+        scope: global
+        type: string
+        description: The IBM Cloud api token
+      - name: name_prefix
+        scope: global
+        type: string
+        description: The name_prefix used to build the name if one is not provided. If used the name will be `{name_prefix}-{label}`
+        default: base
+        optional: true
+      - name: provision
+        type: bool
+        description: Flag indicating that the key should be provisioned. If false then an existing key will be looked up
+        default: false
+        optional: true
+      - name: name
+        type: string
+        description: The name of the root key in the kms instance. Required if kms_enabled is true
+        default: ""
+        optional: true
+      - name: label
+        type: string
+        description: The label used to build the name if one is not provided. If used the name will be `{name_prefix}-{label}`
+        default: key
+        optional: true
+      - name: rotation_interval
+        type: number
+        description: The interval in months that a root key needs to be rotated.
+        default: 3 validation { condition = var.rotation_interval >= 1 && var.rotation_interval <= 12 error_message = The rotation interval must be 1 to 12 months. }
+        optional: true
+      - name: dual_auth_delete
+        type: bool
+        description: Flag indicating that the key requires dual authorization to be deleted.
+        default: false
+        optional: true
+    version: v1.2.1
+    outputs:
+      - name: id
+        description: The id of the key
+      - name: name
+        description: The crn of the key
+      - name: crn
+        description: The crn of the key
+      - name: kms_id
+        description: The id of the kms instance
+  - platforms: []
+    dependencies:
+      - id: kms
+        refs:
+          - source: github.com/ibm-garage-cloud/terraform-ibm-key-protect
+            version: ">= 1.0.0"
+          - source: github.com/ibm-garage-cloud/terraform-ibm-hpcs
+            version: ">= 1.0.0"
     variables:
       - name: kms_id
         moduleRef:

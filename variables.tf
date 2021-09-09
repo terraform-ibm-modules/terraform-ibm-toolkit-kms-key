@@ -21,6 +21,18 @@ variable "kms_id" {
   default     = ""
 }
 
+variable "kms_public_url" {
+  type        = string
+  description = "The public url of the kms instance. Required if kms_enabled is true"
+  default     = ""
+}
+
+variable "kms_private_url" {
+  type        = string
+  description = "The private url of the kms instance. Required if kms_enabled is true"
+  default     = ""
+}
+
 variable "name" {
   type        = string
   description = "The name of the root key in the kms instance. Required if kms_enabled is true"

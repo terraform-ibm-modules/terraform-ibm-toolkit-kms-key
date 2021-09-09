@@ -19,3 +19,13 @@ output "kms_id" {
   value       = var.kms_id
   depends_on  = [ibm_kms_key.root_key, data.ibm_kms_key.root_key]
 }
+
+output "kms_public_url" {
+  description = "The public url of the kms instance"
+  value       = var.kms_public_url
+}
+
+output "kms_private_url" {
+  description = "The private url of the kms instance"
+  value       = var.kms_private_url
+}

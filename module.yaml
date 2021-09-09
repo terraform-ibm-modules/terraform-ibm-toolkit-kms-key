@@ -21,6 +21,14 @@ versions:
       moduleRef:
         id: kms
         output: guid
+    - name: kms_public_url
+      moduleRef:
+        id: kms
+        output: public_url
+    - name: kms_private_url
+      moduleRef:
+        id: kms
+        output: private_url
     - name: region
       moduleRef:
         id: kms

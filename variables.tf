@@ -54,3 +54,9 @@ variable "dual_auth_delete" {
   description = "Flag indicating that the key requires dual authorization to be deleted."
   default     = false
 }
+
+variable "force_delete" {
+  type        = bool
+  description = "Flag indicating that 'force' should be applied to key on delete"
+  default     = true
+}

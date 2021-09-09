@@ -14,9 +14,10 @@ resource ibm_kms_key root_key {
   depends_on = [null_resource.print_values]
   count = var.provision ? 1 : 0
 
-  instance_id = var.kms_id
-  key_name    = local.name
+  instance_id  = var.kms_id
+  key_name     = local.name
   standard_key = false
+  force_delete = var.force_delete
 
   policies {
     rotation {

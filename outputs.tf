@@ -21,13 +21,11 @@ output "kms_id" {
 }
 
 output "kms_public_url" {
-  type        = string
   description = "The public url of the kms instance"
   value       = var.kms_public_url
 }
 
 output "kms_private_url" {
-  type        = string
   description = "The private url of the kms instance"
   value       = var.kms_private_url
 }

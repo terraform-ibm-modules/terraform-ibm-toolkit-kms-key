@@ -1,14 +1,4 @@
 
-variable "region" {
-  type        = string
-  description = "The IBM Cloud region where the cluster will be/has been installed."
-}
-
-variable "ibmcloud_api_key" {
-  type        = string
-  description = "The IBM Cloud api token"
-}
-
 variable "provision" {
   type        = bool
   description = "Flag indicating that the key should be provisioned. If false then an existing key will be looked up"

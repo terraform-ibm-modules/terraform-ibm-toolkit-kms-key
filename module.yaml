@@ -7,6 +7,9 @@ tags:
     - key
 versions:
 - platforms: []
+  providers:
+    - name: ibm
+      source: "ibm-cloud/ibm"
   dependencies:
     - id: kms
       refs:
@@ -29,11 +32,5 @@ versions:
       moduleRef:
         id: kms
         output: private_url
-    - name: region
-      moduleRef:
-        id: kms
-        output: location
-    - name: ibmcloud_api_key
-      scope: global
     - name: name_prefix
       scope: global

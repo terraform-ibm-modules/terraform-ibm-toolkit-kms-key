@@ -21,8 +21,9 @@ resource ibm_kms_key root_key {
 }
 
 resource ibm_kms_key_policies root_key_policy {
+  count = var.provision ? 1 : 0
   instance_id = var.kms_id
-  key_id = ibm_kms_key.root_key.key_id
+  key_id = ibm_kms_key.root_key[0].key_id
   rotation {
     interval_month = var.rotation_interval
   }

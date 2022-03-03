@@ -18,14 +18,16 @@ resource ibm_kms_key root_key {
   key_name     = local.name
   standard_key = false
   force_delete = var.force_delete
+}
 
-  policies {
-    rotation {
-      interval_month = var.rotation_interval
-    }
-    dual_auth_delete {
-      enabled = var.dual_auth_delete
-    }
+resource ibm_kms_key_policies root_key_policy {
+  instance_id = var.kms_id
+  key_id = ibm_kms_key.root_key.key_id
+  rotation {
+    interval_month = var.rotation_interval
+  }
+  dual_auth_delete {
+    enabled = var.dual_auth_delete
   }
 }
 

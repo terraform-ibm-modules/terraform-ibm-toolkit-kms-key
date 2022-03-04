@@ -25,7 +25,7 @@ variable "name_prefix" {
   default     = ""
 }
 
-variable "hpcs_name" {
+variable "key_protect_name" {
   type        = string
 }
 
@@ -45,9 +45,6 @@ variable "hpcs_region" {
   type        = string
 }
 
-variable "hpcs_resource_group_name" {
-  type        = string
-}
 
 variable "kms_key_provision" {
   type        = bool

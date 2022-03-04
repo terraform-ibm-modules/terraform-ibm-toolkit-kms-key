@@ -46,6 +46,6 @@ module "kms_key" {
 
   name             = var.kms_key_name
   provision        = var.kms_key_provision
-  kms_id           = module.kms.guid
+  kms_id           = module.key_protect.guid
 }
 ```

@@ -10,16 +10,104 @@ versions:
   - platforms: []
     providers:
       - name: ibm
-        source: "ibm-cloud/ibm"
+        source: ibm-cloud/ibm
     dependencies:
       - id: kms
         refs:
           - source: github.com/ibm-garage-cloud/terraform-ibm-key-protect
-            version: ">= 1.0.0"
+            version: '>= 1.0.0'
           - source: github.com/ibm-garage-cloud/terraform-ibm-hpcs
-            version: ">= 1.0.0"
+            version: '>= 1.0.0'
           - source: github.com/ibm-garage-cloud/terraform-ibm-kms
-            version: ">= 0.0.0"
+            version: '>= 0.0.0'
+    variables:
+      - name: provision
+        type: bool
+        description: >-
+          Flag indicating that the key should be provisioned. If false then an
+          existing key will be looked up
+        default: false
+      - name: kms_id
+        type: string
+        description: The id of the kms instance. Required if kms_enabled is true
+        default: ''
+        moduleRef:
+          id: kms
+          output: guid
+      - name: kms_public_url
+        type: string
+        description: The public url of the kms instance. Required if kms_enabled is true
+        default: ''
+        moduleRef:
+          id: kms
+          output: public_url
+      - name: kms_private_url
+        type: string
+        description: The private url of the kms instance. Required if kms_enabled is true
+        default: ''
+        moduleRef:
+          id: kms
+          output: private_url
+      - name: name
+        type: string
+        description: >-
+          The name of the root key in the kms instance. Required if kms_enabled
+          is true
+        default: ''
+      - name: name_prefix
+        type: string
+        description: >-
+          The name_prefix used to build the name if one is not provided. If used
+          the name will be `{name_prefix}-{label}`
+        default: base
+        scope: global
+      - name: label
+        type: string
+        description: >-
+          The label used to build the name if one is not provided. If used the
+          name will be `{name_prefix}-{label}`
+        default: key
+      - name: rotation_interval
+        type: number
+        description: The interval in months that a root key needs to be rotated.
+        default: '3'
+      - name: dual_auth_delete
+        type: bool
+        description: >-
+          Flag indicating that the key requires dual authorization to be
+          deleted.
+        default: false
+      - name: force_delete
+        type: bool
+        description: Flag indicating that 'force' should be applied to key on delete
+        default: true
+    version: v1.5.2
+    outputs:
+      - name: id
+        description: The id of the key
+      - name: name
+        description: The crn of the key
+      - name: crn
+        description: The crn of the key
+      - name: kms_id
+        description: The id of the kms instance
+      - name: kms_public_url
+        description: The public url of the kms instance
+      - name: kms_private_url
+        description: The private url of the kms instance
+  - platforms: []
+    providers:
+      - name: ibm
+        source: ibm-cloud/ibm
+    dependencies:
+      - id: kms
+        refs:
+          - source: github.com/ibm-garage-cloud/terraform-ibm-key-protect
+            version: '>= 1.0.0'
+          - source: github.com/ibm-garage-cloud/terraform-ibm-hpcs
+            version: '>= 1.0.0'
+          - source: github.com/ibm-garage-cloud/terraform-ibm-kms
+            version: '>= 0.0.0'
     variables:
       - name: kms_id
         moduleRef:
@@ -27,7 +115,7 @@ versions:
           output: guid
         type: string
         description: The id of the kms instance. Required if kms_enabled is true
-        default: ""
+        default: ''
         optional: true
       - name: kms_public_url
         moduleRef:
@@ -35,7 +123,7 @@ versions:
           output: public_url
         type: string
         description: The public url of the kms instance. Required if kms_enabled is true
-        default: ""
+        default: ''
         optional: true
       - name: kms_private_url
         moduleRef:
@@ -43,37 +131,50 @@ versions:
           output: private_url
         type: string
         description: The private url of the kms instance. Required if kms_enabled is true
-        default: ""
+        default: ''
         optional: true
       - name: name_prefix
         scope: global
         type: string
-        description: The name_prefix used to build the name if one is not provided. If used the name will be `{name_prefix}-{label}`
+        description: >-
+          The name_prefix used to build the name if one is not provided. If used
+          the name will be `{name_prefix}-{label}`
         default: base
         optional: true
       - name: provision
         type: bool
-        description: Flag indicating that the key should be provisioned. If false then an existing key will be looked up
+        description: >-
+          Flag indicating that the key should be provisioned. If false then an
+          existing key will be looked up
         default: false
         optional: true
       - name: name
         type: string
-        description: The name of the root key in the kms instance. Required if kms_enabled is true
-        default: ""
+        description: >-
+          The name of the root key in the kms instance. Required if kms_enabled
+          is true
+        default: ''
         optional: true
       - name: label
         type: string
-        description: The label used to build the name if one is not provided. If used the name will be `{name_prefix}-{label}`
+        description: >-
+          The label used to build the name if one is not provided. If used the
+          name will be `{name_prefix}-{label}`
         default: key
         optional: true
       - name: rotation_interval
         type: number
         description: The interval in months that a root key needs to be rotated.
-        default: 3 validation { condition = var.rotation_interval >= 1 && var.rotation_interval <= 12 error_message = The rotation interval must be 1 to 12 months. }
+        default: >-
+          3 validation { condition = var.rotation_interval >= 1 &&
+          var.rotation_interval <= 12 error_message = The rotation interval must
+          be 1 to 12 months. }
         optional: true
       - name: dual_auth_delete
         type: bool
-        description: Flag indicating that the key requires dual authorization to be deleted.
+        description: >-
+          Flag indicating that the key requires dual authorization to be
+          deleted.
         default: false
         optional: true
       - name: force_delete
@@ -98,16 +199,16 @@ versions:
   - platforms: []
     providers:
       - name: ibm
-        source: "ibm-cloud/ibm"
+        source: ibm-cloud/ibm
     dependencies:
       - id: kms
         refs:
           - source: github.com/ibm-garage-cloud/terraform-ibm-key-protect
-            version: ">= 1.0.0"
+            version: '>= 1.0.0'
           - source: github.com/ibm-garage-cloud/terraform-ibm-hpcs
-            version: ">= 1.0.0"
+            version: '>= 1.0.0'
           - source: github.com/ibm-garage-cloud/terraform-ibm-kms
-            version: ">= 0.0.0"
+            version: '>= 0.0.0'
     variables:
       - name: kms_id
         moduleRef:
@@ -115,7 +216,7 @@ versions:
           output: guid
         type: string
         description: The id of the kms instance. Required if kms_enabled is true
-        default: ""
+        default: ''
         optional: true
       - name: kms_public_url
         moduleRef:
@@ -123,7 +224,7 @@ versions:
           output: public_url
         type: string
         description: The public url of the kms instance. Required if kms_enabled is true
-        default: ""
+        default: ''
         optional: true
       - name: kms_private_url
         moduleRef:
@@ -131,27 +232,35 @@ versions:
           output: private_url
         type: string
         description: The private url of the kms instance. Required if kms_enabled is true
-        default: ""
+        default: ''
         optional: true
       - name: name_prefix
         scope: global
         type: string
-        description: The name_prefix used to build the name if one is not provided. If used the name will be `{name_prefix}-{label}`
+        description: >-
+          The name_prefix used to build the name if one is not provided. If used
+          the name will be `{name_prefix}-{label}`
         default: base
         optional: true
       - name: provision
         type: bool
-        description: Flag indicating that the key should be provisioned. If false then an existing key will be looked up
+        description: >-
+          Flag indicating that the key should be provisioned. If false then an
+          existing key will be looked up
         default: false
         optional: true
       - name: name
         type: string
-        description: The name of the root key in the kms instance. Required if kms_enabled is true
-        default: ""
+        description: >-
+          The name of the root key in the kms instance. Required if kms_enabled
+          is true
+        default: ''
         optional: true
       - name: label
         type: string
-        description: The label used to build the name if one is not provided. If used the name will be `{name_prefix}-{label}`
+        description: >-
+          The label used to build the name if one is not provided. If used the
+          name will be `{name_prefix}-{label}`
         default: key
         optional: true
       - name: rotation_interval
@@ -161,7 +270,9 @@ versions:
         optional: true
       - name: dual_auth_delete
         type: bool
-        description: Flag indicating that the key requires dual authorization to be deleted.
+        description: >-
+          Flag indicating that the key requires dual authorization to be
+          deleted.
         default: false
         optional: true
       - name: force_delete
@@ -188,11 +299,11 @@ versions:
       - id: kms
         refs:
           - source: github.com/ibm-garage-cloud/terraform-ibm-key-protect
-            version: ">= 1.0.0"
+            version: '>= 1.0.0'
           - source: github.com/ibm-garage-cloud/terraform-ibm-hpcs
-            version: ">= 1.0.0"
+            version: '>= 1.0.0'
           - source: github.com/ibm-garage-cloud/terraform-ibm-kms
-            version: ">= 0.0.0"
+            version: '>= 0.0.0'
     variables:
       - name: kms_id
         moduleRef:
@@ -200,7 +311,7 @@ versions:
           output: guid
         type: string
         description: The id of the kms instance. Required if kms_enabled is true
-        default: ""
+        default: ''
         optional: true
       - name: kms_public_url
         moduleRef:
@@ -208,7 +319,7 @@ versions:
           output: public_url
         type: string
         description: The public url of the kms instance. Required if kms_enabled is true
-        default: ""
+        default: ''
         optional: true
       - name: kms_private_url
         moduleRef:
@@ -216,7 +327,7 @@ versions:
           output: private_url
         type: string
         description: The private url of the kms instance. Required if kms_enabled is true
-        default: ""
+        default: ''
         optional: true
       - name: region
         moduleRef:
@@ -231,22 +342,30 @@ versions:
       - name: name_prefix
         scope: global
         type: string
-        description: The name_prefix used to build the name if one is not provided. If used the name will be `{name_prefix}-{label}`
+        description: >-
+          The name_prefix used to build the name if one is not provided. If used
+          the name will be `{name_prefix}-{label}`
         default: base
         optional: true
       - name: provision
         type: bool
-        description: Flag indicating that the key should be provisioned. If false then an existing key will be looked up
+        description: >-
+          Flag indicating that the key should be provisioned. If false then an
+          existing key will be looked up
         default: false
         optional: true
       - name: name
         type: string
-        description: The name of the root key in the kms instance. Required if kms_enabled is true
-        default: ""
+        description: >-
+          The name of the root key in the kms instance. Required if kms_enabled
+          is true
+        default: ''
         optional: true
       - name: label
         type: string
-        description: The label used to build the name if one is not provided. If used the name will be `{name_prefix}-{label}`
+        description: >-
+          The label used to build the name if one is not provided. If used the
+          name will be `{name_prefix}-{label}`
         default: key
         optional: true
       - name: rotation_interval
@@ -256,7 +375,9 @@ versions:
         optional: true
       - name: dual_auth_delete
         type: bool
-        description: Flag indicating that the key requires dual authorization to be deleted.
+        description: >-
+          Flag indicating that the key requires dual authorization to be
+          deleted.
         default: false
         optional: true
       - name: force_delete
@@ -283,11 +404,11 @@ versions:
       - id: kms
         refs:
           - source: github.com/ibm-garage-cloud/terraform-ibm-key-protect
-            version: ">= 1.0.0"
+            version: '>= 1.0.0'
           - source: github.com/ibm-garage-cloud/terraform-ibm-hpcs
-            version: ">= 1.0.0"
+            version: '>= 1.0.0'
           - source: github.com/ibm-garage-cloud/terraform-ibm-kms
-            version: ">= 0.0.0"
+            version: '>= 0.0.0'
     variables:
       - name: kms_id
         moduleRef:
@@ -295,7 +416,7 @@ versions:
           output: guid
         type: string
         description: The id of the kms instance. Required if kms_enabled is true
-        default: ""
+        default: ''
         optional: true
       - name: region
         moduleRef:
@@ -310,22 +431,30 @@ versions:
       - name: name_prefix
         scope: global
         type: string
-        description: The name_prefix used to build the name if one is not provided. If used the name will be `{name_prefix}-{label}`
+        description: >-
+          The name_prefix used to build the name if one is not provided. If used
+          the name will be `{name_prefix}-{label}`
         default: base
         optional: true
       - name: provision
         type: bool
-        description: Flag indicating that the key should be provisioned. If false then an existing key will be looked up
+        description: >-
+          Flag indicating that the key should be provisioned. If false then an
+          existing key will be looked up
         default: false
         optional: true
       - name: name
         type: string
-        description: The name of the root key in the kms instance. Required if kms_enabled is true
-        default: ""
+        description: >-
+          The name of the root key in the kms instance. Required if kms_enabled
+          is true
+        default: ''
         optional: true
       - name: label
         type: string
-        description: The label used to build the name if one is not provided. If used the name will be `{name_prefix}-{label}`
+        description: >-
+          The label used to build the name if one is not provided. If used the
+          name will be `{name_prefix}-{label}`
         default: key
         optional: true
       - name: rotation_interval
@@ -335,7 +464,9 @@ versions:
         optional: true
       - name: dual_auth_delete
         type: bool
-        description: Flag indicating that the key requires dual authorization to be deleted.
+        description: >-
+          Flag indicating that the key requires dual authorization to be
+          deleted.
         default: false
         optional: true
       - name: force_delete
@@ -358,11 +489,11 @@ versions:
       - id: kms
         refs:
           - source: github.com/ibm-garage-cloud/terraform-ibm-key-protect
-            version: ">= 1.0.0"
+            version: '>= 1.0.0'
           - source: github.com/ibm-garage-cloud/terraform-ibm-hpcs
-            version: ">= 1.0.0"
+            version: '>= 1.0.0'
           - source: github.com/ibm-garage-cloud/terraform-ibm-kms
-            version: ">= 0.0.0"
+            version: '>= 0.0.0'
     variables:
       - name: kms_id
         moduleRef:
@@ -370,7 +501,7 @@ versions:
           output: guid
         type: string
         description: The id of the kms instance. Required if kms_enabled is true
-        default: ""
+        default: ''
         optional: true
       - name: region
         moduleRef:
@@ -385,22 +516,30 @@ versions:
       - name: name_prefix
         scope: global
         type: string
-        description: The name_prefix used to build the name if one is not provided. If used the name will be `{name_prefix}-{label}`
+        description: >-
+          The name_prefix used to build the name if one is not provided. If used
+          the name will be `{name_prefix}-{label}`
         default: base
         optional: true
       - name: provision
         type: bool
-        description: Flag indicating that the key should be provisioned. If false then an existing key will be looked up
+        description: >-
+          Flag indicating that the key should be provisioned. If false then an
+          existing key will be looked up
         default: false
         optional: true
       - name: name
         type: string
-        description: The name of the root key in the kms instance. Required if kms_enabled is true
-        default: ""
+        description: >-
+          The name of the root key in the kms instance. Required if kms_enabled
+          is true
+        default: ''
         optional: true
       - name: label
         type: string
-        description: The label used to build the name if one is not provided. If used the name will be `{name_prefix}-{label}`
+        description: >-
+          The label used to build the name if one is not provided. If used the
+          name will be `{name_prefix}-{label}`
         default: key
         optional: true
       - name: rotation_interval
@@ -410,7 +549,9 @@ versions:
         optional: true
       - name: dual_auth_delete
         type: bool
-        description: Flag indicating that the key requires dual authorization to be deleted.
+        description: >-
+          Flag indicating that the key requires dual authorization to be
+          deleted.
         default: false
         optional: true
     version: v1.2.1
@@ -428,9 +569,9 @@ versions:
       - id: kms
         refs:
           - source: github.com/ibm-garage-cloud/terraform-ibm-key-protect
-            version: ">= 1.0.0"
+            version: '>= 1.0.0'
           - source: github.com/ibm-garage-cloud/terraform-ibm-hpcs
-            version: ">= 1.0.0"
+            version: '>= 1.0.0'
     variables:
       - name: kms_id
         moduleRef:
@@ -438,7 +579,7 @@ versions:
           output: guid
         type: string
         description: The id of the kms instance. Required if kms_enabled is true
-        default: ""
+        default: ''
         optional: true
       - name: region
         moduleRef:
@@ -453,22 +594,30 @@ versions:
       - name: name_prefix
         scope: global
         type: string
-        description: The name_prefix used to build the name if one is not provided. If used the name will be `{name_prefix}-{label}`
+        description: >-
+          The name_prefix used to build the name if one is not provided. If used
+          the name will be `{name_prefix}-{label}`
         default: base
         optional: true
       - name: provision
         type: bool
-        description: Flag indicating that the key should be provisioned. If false then an existing key will be looked up
+        description: >-
+          Flag indicating that the key should be provisioned. If false then an
+          existing key will be looked up
         default: false
         optional: true
       - name: name
         type: string
-        description: The name of the root key in the kms instance. Required if kms_enabled is true
-        default: ""
+        description: >-
+          The name of the root key in the kms instance. Required if kms_enabled
+          is true
+        default: ''
         optional: true
       - name: label
         type: string
-        description: The label used to build the name if one is not provided. If used the name will be `{name_prefix}-{label}`
+        description: >-
+          The label used to build the name if one is not provided. If used the
+          name will be `{name_prefix}-{label}`
         default: key
         optional: true
       - name: rotation_interval
@@ -478,7 +627,9 @@ versions:
         optional: true
       - name: dual_auth_delete
         type: bool
-        description: Flag indicating that the key requires dual authorization to be deleted.
+        description: >-
+          Flag indicating that the key requires dual authorization to be
+          deleted.
         default: false
         optional: true
     version: v1.2.0
@@ -496,9 +647,9 @@ versions:
       - id: kms
         refs:
           - source: github.com/ibm-garage-cloud/terraform-ibm-key-protect
-            version: ">= 1.0.0"
+            version: '>= 1.0.0'
           - source: github.com/ibm-garage-cloud/terraform-ibm-hpcs
-            version: ">= 1.0.0"
+            version: '>= 1.0.0'
     variables:
       - name: kms_id
         moduleRef:
@@ -506,7 +657,7 @@ versions:
           output: guid
         type: string
         description: The id of the kms instance. Required if kms_enabled is true
-        default: ""
+        default: ''
         optional: true
       - name: region
         moduleRef:
@@ -521,22 +672,30 @@ versions:
       - name: name_prefix
         scope: global
         type: string
-        description: The name_prefix used to build the name if one is not provided. If used the name will be `{name_prefix}-{label}`
+        description: >-
+          The name_prefix used to build the name if one is not provided. If used
+          the name will be `{name_prefix}-{label}`
         default: base
         optional: true
       - name: provision
         type: bool
-        description: Flag indicating that the key should be provisioned. If false then an existing key will be looked up
+        description: >-
+          Flag indicating that the key should be provisioned. If false then an
+          existing key will be looked up
         default: false
         optional: true
       - name: name
         type: string
-        description: The name of the root key in the kms instance. Required if kms_enabled is true
-        default: ""
+        description: >-
+          The name of the root key in the kms instance. Required if kms_enabled
+          is true
+        default: ''
         optional: true
       - name: label
         type: string
-        description: The label used to build the name if one is not provided. If used the name will be `{name_prefix}-{label}`
+        description: >-
+          The label used to build the name if one is not provided. If used the
+          name will be `{name_prefix}-{label}`
         default: key
         optional: true
     version: v1.1.0
@@ -554,9 +713,9 @@ versions:
       - id: kms
         refs:
           - source: github.com/ibm-garage-cloud/terraform-ibm-key-protect
-            version: ">= 1.0.0"
+            version: '>= 1.0.0'
           - source: github.com/ibm-garage-cloud/terraform-ibm-hpcs
-            version: ">= 1.0.0"
+            version: '>= 1.0.0'
     variables:
       - name: kms_id
         moduleRef:
@@ -564,7 +723,7 @@ versions:
           output: guid
         type: string
         description: The id of the kms instance. Required if kms_enabled is true
-        default: ""
+        default: ''
         optional: true
       - name: region
         moduleRef:
@@ -578,13 +737,17 @@ versions:
         description: The IBM Cloud api token
       - name: provision
         type: bool
-        description: Flag indicating that the key should be provisioned. If false then an existing key will be looked up
+        description: >-
+          Flag indicating that the key should be provisioned. If false then an
+          existing key will be looked up
         default: false
         optional: true
       - name: name
         type: string
-        description: The name of the root key in the kms instance. Required if kms_enabled is true
-        default: ""
+        description: >-
+          The name of the root key in the kms instance. Required if kms_enabled
+          is true
+        default: ''
         optional: true
     version: v1.0.4
     outputs:
@@ -601,9 +764,9 @@ versions:
       - id: kms
         refs:
           - source: github.com/ibm-garage-cloud/terraform-ibm-key-protect
-            version: ">= 1.0.0"
+            version: '>= 1.0.0'
           - source: github.com/ibm-garage-cloud/terraform-ibm-hpcs
-            version: ">= 1.0.0"
+            version: '>= 1.0.0'
     variables:
       - name: kms_id
         moduleRef:
@@ -611,7 +774,7 @@ versions:
           output: guid
         type: string
         description: The id of the kms instance. Required if kms_enabled is true
-        default: ""
+        default: ''
         optional: true
       - name: region
         moduleRef:
@@ -625,13 +788,17 @@ versions:
         description: The IBM Cloud api token
       - name: provision
         type: bool
-        description: Flag indicating that the key should be provisioned. If false then an existing key will be looked up
+        description: >-
+          Flag indicating that the key should be provisioned. If false then an
+          existing key will be looked up
         default: false
         optional: true
       - name: name
         type: string
-        description: The name of the root key in the kms instance. Required if kms_enabled is true
-        default: ""
+        description: >-
+          The name of the root key in the kms instance. Required if kms_enabled
+          is true
+        default: ''
         optional: true
     version: v1.0.3
     outputs:
@@ -648,9 +815,9 @@ versions:
       - id: kms
         refs:
           - source: github.com/ibm-garage-cloud/terraform-ibm-key-protect
-            version: ">= 1.0.0"
+            version: '>= 1.0.0'
           - source: github.com/ibm-garage-cloud/terraform-ibm-hpcs
-            version: ">= 1.0.0"
+            version: '>= 1.0.0'
     variables:
       - name: key_id
         moduleRef:
@@ -667,18 +834,22 @@ versions:
         description: The IBM Cloud api token
       - name: provision
         type: bool
-        description: Flag indicating that the key should be provisioned. If false then an existing key will be looked up
+        description: >-
+          Flag indicating that the key should be provisioned. If false then an
+          existing key will be looked up
         default: false
         optional: true
       - name: kms_id
         type: string
         description: The id of the kms instance. Required if kms_enabled is true
-        default: ""
+        default: ''
         optional: true
       - name: name
         type: string
-        description: The name of the root key in the kms instance. Required if kms_enabled is true
-        default: ""
+        description: >-
+          The name of the root key in the kms instance. Required if kms_enabled
+          is true
+        default: ''
         optional: true
     version: v1.0.2
     outputs:
@@ -695,9 +866,9 @@ versions:
       - id: kms
         refs:
           - source: github.com/ibm-garage-cloud/terraform-ibm-key-protect
-            version: ">= 1.0.0"
+            version: '>= 1.0.0'
           - source: github.com/ibm-garage-cloud/terraform-ibm-hpcsr
-            version: ">= 1.0.0"
+            version: '>= 1.0.0'
     variables:
       - name: key_id
         moduleRef:
@@ -714,18 +885,22 @@ versions:
         description: The IBM Cloud api token
       - name: provision
         type: bool
-        description: Flag indicating that the key should be provisioned. If false then an existing key will be looked up
+        description: >-
+          Flag indicating that the key should be provisioned. If false then an
+          existing key will be looked up
         default: false
         optional: true
       - name: kms_id
         type: string
         description: The id of the kms instance. Required if kms_enabled is true
-        default: ""
+        default: ''
         optional: true
       - name: name
         type: string
-        description: The name of the root key in the kms instance. Required if kms_enabled is true
-        default: ""
+        description: >-
+          The name of the root key in the kms instance. Required if kms_enabled
+          is true
+        default: ''
         optional: true
     version: v1.0.1
     outputs:
@@ -742,9 +917,9 @@ versions:
       - id: kms
         refs:
           - source: github.com/ibm-garage-cloud/terraform-ibm-key-protect
-            version: ">= 1.0.0"
+            version: '>= 1.0.0'
           - source: github.com/ibm-garage-cloud/terraform-ibm-hpcsr
-            version: ">= 1.0.0"
+            version: '>= 1.0.0'
     variables:
       - name: key_id
         moduleRef:
@@ -758,18 +933,22 @@ versions:
         description: The IBM Cloud api token
       - name: provision
         type: bool
-        description: Flag indicating that the key should be provisioned. If false then an existing key will be looked up
+        description: >-
+          Flag indicating that the key should be provisioned. If false then an
+          existing key will be looked up
         default: false
         optional: true
       - name: kms_id
         type: string
         description: The id of the kms instance. Required if kms_enabled is true
-        default: ""
+        default: ''
         optional: true
       - name: name
         type: string
-        description: The name of the root key in the kms instance. Required if kms_enabled is true
-        default: ""
+        description: >-
+          The name of the root key in the kms instance. Required if kms_enabled
+          is true
+        default: ''
         optional: true
     version: v1.0.0
     outputs:
@@ -786,19 +965,5 @@ versions:
       - ocp3
       - ocp4
     dependencies: []
-    #    - id: cluster
-    #      refs:
-    #        - source: github.com/ibm-garage-cloud/terraform-ibm-container-platform
-    #          version: ">= 1.7.0"
-    #        - source: github.com/ibm-garage-cloud/terraform-k8s-ocp-cluster
-    #          version: ">= 2.0.0"
-    #    - id: namespace
-    #      refs:
-    #        - source: github.com/ibm-garage-cloud/terraform-k8s-namespace
-    #          version: ">= 2.1.0"
-    #    - id: dashboard
-    #      refs:
-    #        - source: github.com/ibm-garage-cloud/terraform-k8s-dashboard
-    #          version: ">= 1.6.0"
     variables: []
     version: v0.0.0

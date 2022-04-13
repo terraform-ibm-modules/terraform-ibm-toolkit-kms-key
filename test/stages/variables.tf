@@ -29,10 +29,6 @@ variable "key_protect_name" {
   type        = string
 }
 
-variable "kms_id" {
-  type        = string
-}
-
 variable "kms_key_name" {
   type        = string
 }

@@ -5,5 +5,5 @@ module "keyprotect" {
   region                   = var.region
   name_prefix              = var.name_prefix
   name                     = var.key_protect_name
-  provision                = false
+  provision                = true
 }

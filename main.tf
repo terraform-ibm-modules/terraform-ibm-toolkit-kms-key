@@ -12,7 +12,7 @@ resource null_resource print_values {
 
 resource ibm_kms_key root_key {
   depends_on = [null_resource.print_values]
-  count = var.provision && var.provision_key_rotation_policy ? 1 : 0
+  count = var.provision ? 1 : 0
 
   instance_id  = var.kms_id
   key_name     = local.name
@@ -21,7 +21,7 @@ resource ibm_kms_key root_key {
 }
 
 resource ibm_kms_key_policies root_key_policy {
-  count = var.provision ? 1 : 0
+  count = var.provision && var.provision_key_rotation_policy ? 1 : 0
   instance_id = var.kms_id
   key_id = ibm_kms_key.root_key[0].key_id
   rotation {

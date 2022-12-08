@@ -5,6 +5,12 @@ variable "provision" {
   default     = false
 }
 
+variable "provision_key_rotation_policy" {
+  type        = bool
+  description = "Flag indicating that the key rotation policy should be provisioned. If false then a rotation policy will not be created."
+  default     = false
+}
+
 variable "kms_id" {
   type        = string
   description = "The id of the kms instance. Required if kms_enabled is true"
